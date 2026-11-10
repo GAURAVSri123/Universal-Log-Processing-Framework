@@ -184,7 +184,7 @@ def _normalise_record(topic, partition, offset, payload, kafka_timestamp):
 def fetch_dead_letter_records(
     bootstrap_servers="localhost:9092",
     idle_timeout=0.5,
-    max_records=500,
+    max_records=100,
 ):
     """Read recent messages from both DLQ topics without committing offsets."""
 
@@ -195,7 +195,7 @@ def fetch_dead_letter_records(
     records = []
 
     try:
-        metadata = consumer.list_topics(timeout=5)
+        metadata = consumer.list_topics(timeout=2)
         assignments = []
 
         available_partitions = []
@@ -224,7 +224,7 @@ def fetch_dead_letter_records(
 
             low, high = consumer.get_watermark_offsets(
                 partition_ref,
-                timeout=5,
+                timeout=1,
                 cached=False,
             )
 
@@ -242,8 +242,8 @@ def fetch_dead_letter_records(
 
         idle_rounds = 0
 
-        while len(records) < max_records and idle_rounds < 3:
-            message = consumer.poll(0.25)
+        while len(records) < max_records and idle_rounds < 2:
+            message = consumer.poll(0.1)
 
             if message is None:
                 idle_rounds += 1
