@@ -82,6 +82,11 @@ def main():
         ("Invalid XML", "<event><timestamp>bad</event>", "xml"),
         ("Invalid CSV", "not,enough,columns", "csv"),
         ("Invalid Syslog", "not a syslog message", "syslog"),
+        (
+            "Syslog priority outside RFC range",
+            '<999>1 2026-11-10T10:02:00Z host01 sshd 1234 ID47 - Invalid priority',
+            "syslog",
+        ),
         ("Invalid CEF", "CEF:0|too|few", "cef"),
         ("Invalid LEEF", "LEEF:2.0|too|few", "leef"),
     ]
@@ -91,13 +96,21 @@ def main():
         assert result is None, f"{name}: invalid input unexpectedly parsed"
         print(f"[PASS] {name} rejected")
 
-    # Ensure format-specific source routing returns the full status envelope.
-    routed = parse_by_source(xml_line, "xml_app")
-    assert routed["status"] == "SUCCESS", routed
-    assert routed["record"]["metadata"]["source"] == "xml_app"
-    print("[PASS] Source-based XML routing")
+    # Ensure all five formats work through the collector's source routing.
+    source_routes = [
+        ("XML", xml_line, "xml_app"),
+        ("CSV", csv_line, "csv_app"),
+        ("Syslog", syslog_5424, "syslog_app"),
+        ("CEF", cef_line, "cef_app"),
+        ("LEEF", leef_tab, "leef_app"),
+    ]
+    for name, raw, source_name in source_routes:
+        routed = parse_by_source(raw, source_name)
+        assert routed["status"] == "SUCCESS", (name, routed)
+        assert routed["record"]["metadata"]["source"] == source_name
+        print(f"[PASS] Source-based {name} routing")
 
-    print("\nAll 13 format parser checks passed.")
+    print("\nAll format parser checks passed.")
 
 
 if __name__ == "__main__":
