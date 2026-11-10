@@ -45,8 +45,9 @@ with st.sidebar:
     st.subheader("AI Assistant")
 
     st.info(
-        "The assistant retrieves similar historical logs "
-        "before generating an answer."
+        "For log-investigation questions, the assistant retrieves "
+        "similar historical logs before generating an evidence-based "
+        "answer. General technical questions are answered directly."
     )
 
     if st.button("🗑️ Clear Conversation", use_container_width=True):
