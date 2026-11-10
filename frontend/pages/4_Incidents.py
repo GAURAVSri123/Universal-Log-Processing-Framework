@@ -15,15 +15,19 @@ st.title("🚨 Incident Center")
 st.caption("Review incident candidates derived from the existing AI diagnosis events.")
 
 service = get_incidents_service()
+@st.cache_data(ttl=15, show_spinner=False)
+def load_incidents():
+    return service.fetch_incidents(limit=200)
 
 header_left, header_right = st.columns([5, 1])
 with header_right:
     if st.button("↻ Refresh", use_container_width=True):
+        load_incidents.clear()
         st.rerun()
 
 try:
     with st.spinner("Loading incident records from Kafka..."):
-        incidents, errors = service.fetch_incidents(limit=500)
+        incidents, errors = load_incidents()
 except Exception as exc:
     incidents, errors = [], [str(exc)]
 
