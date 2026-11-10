@@ -745,21 +745,26 @@ def parse_leef_log_detailed(line, source_name):
     if not isinstance(line, str) or not line.startswith("LEEF:"):
         return None, "LEEF record must begin with LEEF:"
 
-    header, separator, extension = line.rstrip("\r\n").partition("|")
-    if not separator:
+    # LEEF 1.0 has five header separators; LEEF 2.0 may add a
+    # sixth field declaring the extension delimiter.
+    parts = line.rstrip("\r\n").split("|", 6)
+    if len(parts) < 6:
         return None, "LEEF record is missing its extension separator"
 
-    header_parts = header.split("|")
-    # Header is LEEF:version|vendor|product|version|event-id[|delimiter]
-    if len(header_parts) < 5:
-        return None, "LEEF header must contain version, vendor, product, version, and event ID"
+    leef_version = parts[0][5:]
+    vendor, product, device_version, event_id = parts[1:5]
 
-    leef_version = header_parts[0][5:]
-    vendor, product, device_version, event_id = header_parts[1:5]
-    extension_delimiter = "\t"
-    if len(header_parts) > 5 and header_parts[5]:
-        delimiter_name = header_parts[5]
-        extension_delimiter = "\t" if delimiter_name.lower() in ("tab", "\\t") else delimiter_name
+    if len(parts) == 6:
+        extension_delimiter = "\t"
+        extension = parts[5]
+    else:
+        delimiter_name = parts[5]
+        extension_delimiter = (
+            "\t"
+            if delimiter_name.lower() in ("tab", "\\t")
+            else delimiter_name
+        )
+        extension = parts[6]
 
     if extension_delimiter == "\t":
         fields = _parse_key_value_extension(extension, delimiter_pattern=r"\t+")
