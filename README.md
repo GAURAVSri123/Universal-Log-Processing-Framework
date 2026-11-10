@@ -515,19 +515,59 @@ Streamlit will display a local application URL in the terminal. Open that URL in
 
 The repository contains individual test scripts for checking different parts of the application.
 
-For example, the parser error-handling test can be executed with:
+### Verified Parser Test Results
+
+The parser validation scripts were executed successfully on **10 November 2026**:
+
+| Test Script | Result | Coverage |
+|---|---:|---|
+| `test_parser_errors.py` | 7/7 passed | Unknown sources, malformed JSON, missing fields, invalid severity and valid records |
+| `test_parser_formats.py` | 18/18 passed | XML, CSV, Syslog RFC5424/RFC3164, CEF, LEEF 1.0/2.0, invalid-format handling and source-based routing |
+| **Total** | **25/25 passed** | Parser error handling and supported-format validation |
+
+Run the tests with:
 
 ```powershell
 python test_parser_errors.py
+python test_parser_formats.py
 ```
 
-The parser test exercises cases including:
+### Verified RAG and AI Diagnosis Execution
 
-- Unknown log sources.
-- Malformed JSON.
-- Missing required fields.
-- Invalid severity values.
-- Valid JSON records.
+The standalone RAG pipeline was executed successfully using:
+
+```powershell
+python rag_pipeline.py
+```
+
+The observed execution confirmed that the pipeline:
+
+1. Loaded the `all-MiniLM-L6-v2` embedding model.
+2. Connected to the Elasticsearch vector store.
+3. Retrieved three semantically relevant historical payment-error logs.
+4. Built the RAG context.
+5. Sent the context to the Groq-hosted LLM.
+6. Returned a structured JSON diagnosis containing a problem summary, severity, possible causes, supporting evidence, verification steps, recommended actions, confidence and limitations.
+
+The sample diagnosis correctly left `confirmed_causes` empty because the available current and historical log evidence did not prove a root cause.
+
+### Verified Kafka AI Diagnosis Service Execution
+
+The AI diagnosis consumer was also started successfully using:
+
+```powershell
+python ai_diagnosis_service.py
+```
+
+During the observed run, it connected to Kafka, subscribed to `processed-logs`, skipped records that were not ERROR or CRITICAL, and successfully processed **12 eligible events**. For each of these successful events, the service:
+
+- Retrieved three relevant historical logs through semantic search.
+- Generated a RAG context and obtained a Groq diagnosis.
+- Published the diagnosis to `ai-diagnosis`.
+- Indexed the source log in the `log-knowledge-base` vector index.
+- Completed processing of the source event.
+
+The run was manually stopped while another event was being analyzed. That in-progress event is not included in the count of 12 successful diagnoses. This execution demonstrates the successful path; it does not by itself establish that the DLQ failure path was triggered during this run.
 
 Other project test scripts should be executed individually according to their respective component and dependencies.
 
