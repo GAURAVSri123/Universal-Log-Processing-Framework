@@ -54,11 +54,12 @@ A Streamlit dashboard provides a centralized interface for monitoring, searching
 ```mermaid
 flowchart TD
     A["Application Log Files"] --> B["Log Collector"]
-    B --> C["Checkpoint and File Identity"]
-    C --> D["Log Parser"]
+    B --> D["Log Parser"]
     D --> E["Validation and Normalization"]
     E --> F["Sensitive Data Masking"]
     F --> G["Kafka: normalized-logs"]
+
+    C["Checkpoint Manager<br/>File identity and read position"] -. "Supports collection progress" .-> B
 
     G --> H["Log Processing Service"]
     H --> I["Severity Classification"]
@@ -123,13 +124,11 @@ The collector:
 - Discovers supported log files.
 - Reads new records incrementally.
 - Publishes parsed events into Kafka.
-- Maintains checkpoints to track previously processed file positions.
+- Maintains collection progress through a supporting Checkpoint Manager.
 - Uses file identity information to help recognize renamed or rotated files.
 - Recovers saved offsets where the physical file identity matches.
 
-Checkpoint information is stored in the `checkpoints/` directory.
-
-This approach helps avoid repeatedly reading the entire file when the collector restarts.
+The Checkpoint Manager is a supporting component of the Log Collector, not a separate stage in the log-processing pipeline. It stores file identity and read-position information in the `checkpoints/` directory, allowing the collector to resume from the appropriate position after a restart and helping avoid repeatedly reading the entire file.
 
 ### 2. Parsing and Normalization
 
