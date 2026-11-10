@@ -554,7 +554,11 @@ SYSLOG_SEVERITY = {
 
 
 def _syslog_level(priority):
-    severity_code = int(priority) % 8
+    """Map a valid syslog PRI value (0-191) to a log severity."""
+    priority = int(priority)
+    if not 0 <= priority <= 191:
+        return None
+    severity_code = priority % 8
     return SYSLOG_SEVERITY[severity_code]
 
 
@@ -579,9 +583,13 @@ def parse_syslog_log_detailed(line, source_name):
         timestamp = _parse_event_timestamp(fields["timestamp"])
         if timestamp is None:
             return None, "RFC 5424 syslog record has an invalid timestamp"
+        level = _syslog_level(fields["pri"])
+        if level is None:
+            return None, "Syslog PRI must be between 0 and 191"
+
         record = {
             "timestamp": timestamp,
-            "level": _syslog_level(fields["pri"]),
+            "level": level,
             "service": fields["app"],
             "message": fields.get("message") or fields["msgid"],
             "attributes": {
@@ -617,9 +625,13 @@ def parse_syslog_log_detailed(line, source_name):
         except ValueError as exc:
             return None, f"Invalid RFC 3164 syslog timestamp: {exc}"
 
+        level = _syslog_level(fields["pri"])
+        if level is None:
+            return None, "Syslog PRI must be between 0 and 191"
+
         record = {
             "timestamp": parsed.isoformat(),
-            "level": _syslog_level(fields["pri"]),
+            "level": level,
             "service": fields["tag"],
             "message": fields["message"],
             "attributes": {
