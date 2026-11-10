@@ -6,7 +6,7 @@ tests = [
     (
         "Unknown source",
         "2026-10-23 20:00:00,000 INFO server - Server started",
-        "server"
+        "unknown_service"
     ),
     (
         "Malformed JSON",
@@ -30,6 +30,17 @@ tests = [
             "message": "Payment failed"
         }),
         "payment_api"
+    ),
+
+    (
+        "Valid simple-text server log",
+        "2026-10-22 10:16:01 INFO Server started",
+        "server"
+    ),
+    (
+        "Valid simple-text app log",
+        "2026-10-22 17:00:02 ERROR Database connection failed",
+        "app"
     ),
     (
         "Valid JSON record",
