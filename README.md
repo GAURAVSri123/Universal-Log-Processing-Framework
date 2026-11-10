@@ -1,79 +1,94 @@
 # Universal Log Processing Framework with AI Analysis
 
-### Intelligent Log Processing | Real-Time Streaming | Semantic Search | AI-Powered Investigation
+<p align="center">
 
-An end-to-end, event-driven log processing and analysis platform designed to transform raw application logs into structured, searchable, and actionable intelligence using **Python, Apache Kafka, Elasticsearch, Retrieval-Augmented Generation (RAG), and Large Language Models (LLMs).**
+**An Intelligent, Event-Driven Log Processing and AI Investigation Platform**
 
-The system combines scalable log processing with AI-powered diagnosis to help developers and system administrators understand application failures, investigate incidents, and identify potential root causes.
+Transforming raw application logs into structured, searchable, and actionable insights.
+
+</p>
 
 ---
 
 ## Overview
 
-Modern applications generate massive volumes of logs across different services, systems, and formats. Manually analyzing these logs makes troubleshooting slow, especially when errors are distributed across multiple services.
+The **Universal Log Processing Framework with AI Analysis** is an end-to-end log processing and investigation platform built using Python, Apache Kafka, Elasticsearch, Sentence Transformers, Retrieval-Augmented Generation (RAG), and Large Language Models (LLMs).
 
-The Universal Log Processing Framework addresses this challenge through a unified architecture that:
+Modern applications generate large volumes of logs across different services and formats. Manually examining these records makes it difficult to identify failures, understand recurring errors, and investigate application problems.
 
-- Collects logs from multiple sources and formats.
-- Parses, validates, and normalizes incoming records.
-- Masks sensitive information before downstream processing.
-- Processes log events through Apache Kafka.
-- Classifies events according to severity and priority.
-- Stores searchable logs in Elasticsearch.
-- Uses semantic vector search to retrieve relevant historical events.
-- Applies RAG and LLMs to generate contextual AI diagnoses.
-- Provides an interactive dashboard for log exploration and investigation.
+This project addresses that challenge through a unified pipeline that collects application logs, parses and normalizes records, masks sensitive information, processes events through Kafka, classifies their severity, and indexes them in Elasticsearch.
 
-**The objective is not just to store logs, but to make them understandable and useful for troubleshooting.**
+It also integrates semantic vector search and an AI-powered diagnosis pipeline. Relevant historical log records are retrieved and supplied as context to an LLM, helping generate explanations, possible causes, verification steps, and recommended actions.
+
+A Streamlit dashboard provides a centralized interface for monitoring, searching, and investigating processed logs.
+
+**The primary objective is to transform raw log data into meaningful information that supports application troubleshooting and operational analysis.**
+
+---
 
 ## Key Features
 
-| Feature | Description |
+| Feature | Implementation |
 |---|---|
-| Multi-format collection | JSON, XML, CSV, Syslog, CEF and LEEF |
-| Log normalization | Standardized structure across different sources |
-| Sensitive data masking | Masks passwords, tokens and email addresses |
-| Real-time streaming | Kafka-based event processing |
-| Severity classification | CRITICAL, ERROR, WARNING and INFO |
-| Priority assignment | P1, P2, P3 and P4 |
-| Elasticsearch indexing | Centralized log storage and search |
-| Semantic search | Similarity-based historical log retrieval |
-| AI diagnosis | Contextual error analysis using LLMs |
-| RAG architecture | Combines retrieved log evidence with LLM generation |
-| Dead Letter Queue | Handles failed log-processing events |
-| Incident management | Dedicated incident investigation interface |
-| Interactive dashboard | Streamlit-based monitoring and analysis |
+| Multi-format log parsing | JSON, XML, CSV, Syslog, CEF and LEEF |
+| Log normalization | Converts supported input records into a canonical structure |
+| Sensitive information masking | Masks configured sensitive fields, email addresses and phone-like values |
+| File-based log collection | Reads application log files incrementally |
+| Checkpoint management | Stores file offsets and identifies files during rotation or renaming |
+| Event streaming | Apache Kafka |
+| Severity classification | CRITICAL, ERROR, WARNING, INFO and DEBUG |
+| Priority assignment | P1, P2, P3, P4 and P5 |
+| Failed-event handling | Kafka Dead Letter Queues |
+| Log storage and search | Elasticsearch |
+| Semantic embeddings | Sentence Transformers |
+| Vector search | Elasticsearch dense-vector similarity search |
+| AI diagnosis | Groq-hosted LLM |
+| RAG architecture | Combines historical log retrieval with LLM analysis |
+| Interactive dashboard | Streamlit and Plotly |
+| Local infrastructure | Docker Compose |
+
+---
 
 ## System Architecture
 
 ```mermaid
 flowchart TD
-    A["Multiple Log Sources"] --> B["Log Collector"]
-    B --> C["Parser and Validator"]
-    C --> D["Normalization and Masking"]
-    D --> E["Kafka: normalized-logs"]
+    A["Application Log Files"] --> B["Log Collector"]
+    B --> C["Checkpoint and File Identity"]
+    C --> D["Log Parser"]
+    D --> E["Validation and Normalization"]
+    E --> F["Sensitive Data Masking"]
+    F --> G["Kafka: normalized-logs"]
 
-    E --> F["Log Processing Service"]
-    F --> G["Classification and Priority"]
-    F --> H["Dead Letter Queue"]
+    G --> H["Log Processing Service"]
+    H --> I["Severity Classification"]
+    I --> J["Priority Assignment"]
 
-    G --> I["Kafka: processed-logs"]
-    I --> J["Elasticsearch Indexer"]
-    J --> K["Elasticsearch Log Index"]
+    H --> K["dead-letter-logs"]
+    J --> L["Kafka: processed-logs"]
 
-    I --> L["AI Diagnosis Service"]
-    L --> M["Embedding Generation"]
-    M --> N["Elasticsearch Vector Store"]
-    N --> O["Semantic Retrieval"]
-    O --> P["RAG Context Builder"]
-    P --> Q["Groq LLM"]
-    Q --> R["AI Diagnosis"]
-    R --> S["Kafka: ai-diagnosis"]
+    L --> M["Elasticsearch Indexer"]
+    M --> N["Elasticsearch: processed-logs"]
 
-    K --> T["Streamlit Dashboard"]
-    H --> T
-    S --> T
+    L --> O["AI Diagnosis Service"]
+    O --> P["Sentence Transformer"]
+    P --> Q["384-Dimensional Embeddings"]
+    Q --> R["Elasticsearch Vector Store"]
+    R --> S["Semantic Retrieval"]
+    S --> T["RAG Context Builder"]
+    T --> U["Groq LLM"]
+    U --> V["AI Diagnosis"]
+    V --> W["Kafka: ai-diagnosis"]
+
+    O --> X["ai-diagnosis-dlq"]
+
+    N --> Y["Streamlit Dashboard"]
+    W --> Y
+    K --> Y
+    X --> Y
 ```
+
+---
 
 ## Technology Stack
 
@@ -81,24 +96,46 @@ flowchart TD
 |---|---|
 | Programming Language | Python |
 | Event Streaming | Apache Kafka 4.3.1 |
+| Kafka Client | kafka-python and confluent-kafka |
 | Search and Storage | Elasticsearch 8.17.4 |
-| Vector Search | Elasticsearch Dense Vectors |
-| Embedding Model | Sentence Transformers |
-| Pre-trained Model | all-MiniLM-L6-v2 |
-| AI / LLM | Groq API |
-| AI Architecture | Retrieval-Augmented Generation (RAG) |
-| Frontend | Streamlit |
-| Containerization | Docker |
-| Local State | SQLite |
+| Vector Database | Elasticsearch Dense Vectors |
+| Embedding Framework | Sentence Transformers |
+| Embedding Model | all-MiniLM-L6-v2 |
+| Embedding Dimensions | 384 |
+| AI / LLM Provider | Groq API |
+| AI Architecture | Retrieval-Augmented Generation |
+| Dashboard | Streamlit |
+| Data Analysis and Visualization | Pandas and Plotly |
+| Local Database | SQLite for local processing state |
+| Containerization | Docker Compose |
 | Version Control | Git and GitHub |
+
+---
 
 ## Architecture and Processing Pipeline
 
 ### 1. Log Collection
 
-The collection layer accepts logs from different applications and sources.
+The collection layer reads application log files from the project's `logs/` directory.
 
-Supported formats:
+The collector:
+
+- Discovers supported log files.
+- Reads new records incrementally.
+- Publishes parsed events into Kafka.
+- Maintains checkpoints to track previously processed file positions.
+- Uses file identity information to help recognize renamed or rotated files.
+- Recovers saved offsets where the physical file identity matches.
+
+Checkpoint information is stored in the `checkpoints/` directory.
+
+This approach helps avoid repeatedly reading the entire file when the collector restarts.
+
+### 2. Parsing and Normalization
+
+Different applications produce logs in different formats. The parser converts supported records into a consistent structure.
+
+Supported formats include:
 
 - JSON
 - XML
@@ -107,39 +144,66 @@ Supported formats:
 - Common Event Format (CEF)
 - Log Event Extended Format (LEEF)
 
-### 2. Parsing, Validation and Normalization
+The canonical log structure contains fields such as:
 
-The parser extracts relevant information from incoming records and converts them into a consistent structure.
+| Field | Purpose |
+|---|---|
+| `timestamp` | Time associated with the log event |
+| `level` | Log severity |
+| `service` | Application or service name |
+| `message` | Main log message |
+| `attributes` | Additional structured information |
+| `raw` | Masked representation of the original record |
+| `metadata` | Source and ingestion information |
 
-Validation ensures that records contain the required information before entering the processing pipeline.
+The parser also validates required fields before an event enters the downstream processing pipeline.
 
 ### 3. Sensitive Data Masking
 
-Sensitive information is masked to reduce the risk of exposing confidential data during processing and analysis.
+Logs can contain confidential information, including authentication credentials and personally identifiable information.
 
-Examples include:
+The framework includes masking logic to reduce the risk of exposing sensitive values.
+
+Configured sensitive fields include:
 
 - Passwords
-- Authentication tokens
-- Email addresses
+- Secrets
+- Access and refresh tokens
+- API keys
+- Authorization values
+- Cookies
+- Credit-card and card-number fields
+- Social Security Number fields
 
-### 4. Kafka-Based Streaming
+The parser also includes masking for email addresses and phone-number-like values.
 
-Apache Kafka acts as the messaging backbone of the framework.
+**Note:** This is a practical masking implementation, not a guarantee that every possible form of sensitive information will be detected. Production deployments should add organization-specific detection rules and security testing.
 
-The main topics include:
+### 4. Kafka-Based Event Streaming
 
-| Kafka Topic | Purpose |
+Apache Kafka provides the messaging backbone of the architecture.
+
+It separates log collection from downstream processing, indexing, and AI analysis.
+
+The main Kafka topics are:
+
+| Topic | Purpose |
 |---|---|
-| `normalized-logs` | Receives normalized log events |
-| `processed-logs` | Contains classified and processed events |
-| `dead-letter-logs` | Stores failed log-processing events |
-| `ai-diagnosis` | Publishes AI-generated diagnoses |
-| `ai-diagnosis-dlq` | Handles failed AI diagnosis events |
+| `normalized-logs` | Receives parsed and normalized log events |
+| `processed-logs` | Contains validated, classified and prioritized events |
+| `dead-letter-logs` | Stores events that fail log processing |
+| `ai-diagnosis` | Receives AI-generated diagnosis events |
+| `ai-diagnosis-dlq` | Stores events that fail AI diagnosis processing |
 
-### 5. Classification and Prioritization
+The services communicate through Kafka rather than relying on direct communication between every component.
 
-The processing service classifies log events and assigns priorities.
+### 5. Log Classification and Prioritization
+
+The Log Processing Service consumes events from `normalized-logs`.
+
+It validates each event, identifies its severity, assigns a classification and priority, and publishes the processed event to `processed-logs`.
+
+The implemented classification rules are:
 
 | Severity | Classification | Priority |
 |---|---|---|
@@ -147,57 +211,139 @@ The processing service classifies log events and assigns priorities.
 | ERROR | APPLICATION_ERROR | P2 |
 | WARNING | POTENTIAL_ISSUE | P3 |
 | INFO | NORMAL_OPERATION | P4 |
+| DEBUG | DIAGNOSTIC_INFORMATION | P5 |
 
-This helps identify the events requiring immediate attention.
+Priority levels help distinguish critical failures from normal operational and diagnostic information.
 
-### 6. Elasticsearch Integration
+### 6. Elasticsearch Indexing and Search
 
-Processed events are indexed in Elasticsearch.
+The Elasticsearch Indexer consumes events from `processed-logs` and stores them in the `processed-logs` index.
 
-The search layer enables efficient retrieval and filtering of logs based on available fields and search criteria.
+Elasticsearch provides:
 
-### 7. AI-Powered Log Diagnosis
+- Centralized log storage.
+- Search by severity.
+- Search by service.
+- Search by priority.
+- Keyword-based message search.
+- Aggregations for dashboard metrics.
+- Retrieval of recent processed events.
 
-The AI diagnosis service analyzes relevant ERROR and CRITICAL events.
+The dashboard uses Elasticsearch to display log statistics and provide searchable records.
 
-It uses historical log information and semantic retrieval to provide additional context for diagnosing failures.
+### 7. Semantic Embedding Generation
 
-### 8. Dead Letter Queue
+Traditional keyword searches may not identify logs that describe similar problems using different words.
 
-When a log cannot be processed successfully, it can be routed to the appropriate Dead Letter Queue.
+To improve historical log retrieval, the framework uses Sentence Transformers.
 
-This helps isolate failures without silently losing problematic events and supports subsequent investigation.
+The selected model is:
 
-## AI Analysis and RAG Workflow
+`sentence-transformers/all-MiniLM-L6-v2`
 
-One of the most important components of this project is its AI-powered diagnostic pipeline.
+The embedding generator converts log information into a numerical vector containing **384 dimensions**.
 
-Instead of asking an LLM to analyze an error without context, the framework retrieves relevant historical log information and provides it to the model.
+The embedding text incorporates available fields such as:
 
-**The workflow:**
+- Service
+- Severity
+- Classification
+- Priority
+- Message
 
-1. **Embedding Generation:** Sentence Transformers converts log text into numerical vector representations.
-2. **Vector Storage:** Embeddings are stored in an Elasticsearch vector index.
-3. **Semantic Search:** Relevant historical logs are retrieved based on vector similarity.
-4. **Context Building:** Retrieved information is organized into useful diagnostic context.
-5. **LLM Analysis:** The context is provided to a Groq-hosted language model.
-6. **Diagnosis Publishing:** The generated diagnosis is published through the `ai-diagnosis` Kafka topic.
+These embeddings allow the system to compare log events based on semantic similarity.
 
-This architecture combines information retrieval with language-model reasoning to generate more context-aware diagnostic explanations.
+### 8. Elasticsearch Vector Search
+
+Generated embeddings are stored in the Elasticsearch vector index:
+
+`log-knowledge-base`
+
+The index uses dense vectors with cosine similarity.
+
+When a new error requires investigation, the system generates an embedding for the query and searches for semantically similar historical log records.
+
+The retrieval pipeline is configured to return a limited number of relevant records (top-k), rather than sending the entire log history to the LLM.
+
+### 9. AI-Powered Diagnosis with RAG
+
+The project uses Retrieval-Augmented Generation (RAG) to provide historical log context to an LLM.
+
+The diagnosis service:
+
+1. Consumes events from `processed-logs`.
+2. Selects ERROR and CRITICAL events for AI diagnosis.
+3. Generates a query from the current log information.
+4. Retrieves relevant historical log records through semantic search.
+5. Builds diagnostic context using the retrieved evidence.
+6. Sends the context to a Groq-hosted language model.
+7. Produces a structured diagnosis.
+8. Publishes the result to `ai-diagnosis`.
+
+The AI diagnosis includes:
+
+- Problem summary
+- Severity assessment
+- Possible causes
+- Supporting evidence
+- Verification steps
+- Confirmed causes, when supported by evidence
+- Recommended actions
+- Confidence level
+- Diagnostic limitations
+
+The prompt instructs the model not to present possible causes as confirmed root causes without direct supporting evidence.
+
+**Important:** AI-generated diagnoses are investigative assistance. They should be verified against application behavior, infrastructure metrics and other operational evidence.
+
+### 10. Dead Letter Queue Handling
+
+The framework includes separate failure-handling paths for log processing and AI diagnosis.
+
+- `dead-letter-logs` stores events that fail the log-processing stage.
+- `ai-diagnosis-dlq` stores events that fail the AI diagnosis stage.
+
+Failure records include relevant error details and source Kafka information where available.
+
+The services use controlled processing and publication logic to avoid silently discarding problematic events.
+
+The dashboard provides a read-only view of recent dead-letter messages. It does not currently provide message replay, retry, or deletion controls.
+
+---
 
 ## Interactive Dashboard
 
-The Streamlit application provides five main modules.
+The Streamlit application provides six functional sections.
 
-| Module | Functionality |
+| Dashboard Section | Description |
 |---|---|
-| Log Explorer | Search, filter and inspect processed logs |
-| AI Assistant | Interact with the AI-powered diagnostic assistant |
-| AI Investigations | Investigate related events and service-level issues |
-| Incidents | Review and investigate incidents |
-| Dead Letter Queue | Inspect failed log-processing events |
+| **Overview Dashboard** | Displays processed-log metrics, severity and priority distributions, daily activity trends and knowledge-base statistics. |
+| **Log Explorer** | Searches, filters and inspects processed logs using Elasticsearch. |
+| **AI Assistant** | Provides a conversational interface for general log-related questions and diagnostic assistance. |
+| **AI Investigations** | Displays recent AI diagnosis events and helps examine historical investigation results. |
+| **Incidents** | Presents a read-only incident-style view derived from AI diagnosis events. |
+| **Dead Letter Queue** | Displays recent failed messages from the two DLQ Kafka topics. |
+
+### Important Dashboard Design Details
+
+**AI Assistant and AI Investigations are separate features.**
+
+- AI Assistant provides a conversational interface and determines whether a question requires historical log retrieval.
+- AI Investigations focuses on retrieving and displaying existing AI diagnosis events.
+
+**Incidents is a read-only view.**
+
+Each displayed incident represents an AI-diagnosed log event. The current implementation does not maintain a complete incident lifecycle with open, acknowledged, assigned and resolved states.
+
+**Dead Letter Queue is also read-only.**
+
+It displays available failed messages for inspection. It does not currently replay, retry or delete Kafka messages.
+
+---
 
 ## Project Structure
+
+The following is a view of the principal project files and directories:
 
 ```text
 Universal-Log-Processing-Framework/
@@ -210,19 +356,17 @@ Universal-Log-Processing-Framework/
 │   ├── dlq_service.py
 │   ├── incidents_service.py
 │   ├── investigations_service.py
-│   │
 │   └── pages/
-│       ├── 1_Log_Explorer.py
-│       ├── 2_AI_Assistant.py
-│       ├── 3_AI_Investigations.py
-│       ├── 4_Incidents.py
-│       └── 5_Dead_Letter_Queue.py
+│       └── 1_Log_Explorer.py
+│
+├── logs/
+├── checkpoints/
 │
 ├── log_collector.py
 ├── log_parser.py
 ├── kafka_publisher.py
-├── log_processing_service.py
 ├── kafka_consumer.py
+├── log_processing_service.py
 │
 ├── elasticsearch_indexer.py
 ├── elasticsearch_search.py
@@ -244,24 +388,31 @@ Universal-Log-Processing-Framework/
 └── test_*.py
 ```
 
+This tree highlights the main application components; it is not intended to enumerate every repository file or every dashboard page.
+
+---
+
 ## Installation and Setup
 
 ### Prerequisites
 
-- Python 3.10 or compatible version
-- Docker Desktop
-- Git
-- Groq API key
+Install the following before running the project:
 
-### 1. Clone the repository
+- Python compatible with the pinned project dependencies.
+- Docker Desktop with Docker Compose.
+- Git.
+- A Groq API key.
+- Sufficient memory and disk space for Elasticsearch and the embedding model.
 
-```bash
+### 1. Clone the Repository
+
+```powershell
 git clone https://github.com/GAURAVSri123/Universal-Log-Processing-Framework.git
 
 cd Universal-Log-Processing-Framework
 ```
 
-### 2. Create a virtual environment
+### 2. Create a Virtual Environment
 
 ```powershell
 python -m venv .venv
@@ -269,111 +420,219 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-### 3. Install dependencies
+If PowerShell blocks virtual-environment activation, use an appropriate execution policy for your local environment or activate the environment through another supported terminal.
 
-```bash
+### 3. Install Dependencies
+
+```powershell
+python -m pip install --upgrade pip
+
 pip install -r requirements.txt
 ```
 
-### 4. Configure environment variables
+### 4. Configure Environment Variables
 
 Create a `.env` file in the project root.
 
 ```env
 GROQ_API_KEY=your_groq_api_key
-GROQ_MODEL=your_supported_groq_model
+GROQ_MODEL=openai/gpt-oss-120b
 ```
 
-Replace the placeholder values with your actual credentials and supported model configuration.
+The configured model is the default in the current LLM implementation. Change it only to a model supported by your Groq account.
 
-**Security:** Never commit or publish your `.env` file or API credentials.
+**Security:** Never commit `.env` files, API keys or other credentials to GitHub.
 
 ### 5. Start Apache Kafka
 
-```bash
+Run:
+
+```powershell
 docker compose -f docker-compose.kafka.yml up -d
 ```
 
+The Kafka container is configured to expose port `9092`.
+
 ### 6. Start Elasticsearch
 
-```bash
+Run:
+
+```powershell
 docker compose -f docker-compose.elasticsearch.yml up -d
 ```
 
-### 7. Start the processing services
+Elasticsearch is configured at:
 
-Run the required backend services in separate terminal windows, in pipeline order:
+```text
+http://localhost:9200
+```
 
-```bash
+The supplied local Docker configuration uses a single-node setup with Elasticsearch security disabled. It is intended for local development, not direct production deployment.
+
+### 7. Start the Log Processing Pipeline
+
+Open separate PowerShell terminals, activate the virtual environment in each terminal, and run the services.
+
+**Terminal 1 — Log Collector**
+
+```powershell
 python log_collector.py
 ```
 
-```bash
+**Terminal 2 — Log Processing Service**
+
+```powershell
 python log_processing_service.py
 ```
 
-```bash
+**Terminal 3 — Elasticsearch Indexer**
+
+```powershell
 python elasticsearch_indexer.py
 ```
 
-```bash
+**Terminal 4 — AI Diagnosis Service**
+
+```powershell
 python ai_diagnosis_service.py
 ```
 
-Ensure the required Kafka topics, Elasticsearch connection, and environment configuration are available before starting the services.
+The services depend on the availability of Kafka, Elasticsearch and the required configuration.
 
-### 8. Launch the dashboard
+### 8. Launch the Dashboard
 
-```bash
+Open another terminal and run:
+
+```powershell
 streamlit run frontend/app.py
 ```
 
-Open the local URL displayed in your terminal to access the application.
+Streamlit will display a local application URL in the terminal. Open that URL in your browser.
 
-## Testing
+---
 
-The project includes tests covering different parts of the processing architecture.
+## Testing and Verification
 
-Current test modules include:
+The repository contains individual test scripts for checking different parts of the application.
 
-- Collector startup and shutdown handling
-- Kafka log collection
-- Kafka publishing failure handling
-- Kafka failure scenarios
-- Parser error handling
-- Groq API integration
+For example, the parser error-handling test can be executed with:
 
-Example:
-
-```bash
+```powershell
 python test_parser_errors.py
 ```
 
-Individual test scripts can be executed to verify their respective components.
+The parser test exercises cases including:
 
-## Future Scope
+- Unknown log sources.
+- Malformed JSON.
+- Missing required fields.
+- Invalid severity values.
+- Valid JSON records.
 
-Potential future improvements include:
+Other project test scripts should be executed individually according to their respective component and dependencies.
 
-- Machine-learning-based anomaly detection.
-- Advanced distributed incident correlation.
-- Automated root-cause analysis.
-- Additional log source integrations.
-- Role-based access control.
-- Advanced alerting and notification mechanisms.
-- Cloud-based deployment and horizontal scaling.
+For an end-to-end verification, check that:
+
+1. Kafka and Elasticsearch containers are running.
+2. The collector discovers the configured log files.
+3. Normalized events appear in `normalized-logs`.
+4. Processed events appear in `processed-logs`.
+5. Elasticsearch indexes processed events.
+6. Embeddings are available in `log-knowledge-base`.
+7. Eligible ERROR and CRITICAL events receive AI diagnosis.
+8. Diagnosis events appear in `ai-diagnosis`.
+9. Failed events are routed to the appropriate DLQ.
+10. The dashboard can retrieve and display the available information.
+
+---
+
+## Configuration and Operational Notes
+
+- Kafka and Elasticsearch connection addresses are configured in the relevant project modules.
+- The dashboard's Elasticsearch configuration is defined in `frontend/config.py`.
+- The collector reads from the project's `logs/` directory.
+- Collector checkpoint files are stored in `checkpoints/`.
+- The AI diagnosis service uses a maximum of three processing attempts for an AI event.
+- The diagnosis service processes ERROR and CRITICAL events.
+- The RAG pipeline retrieves up to three relevant historical logs by default.
+- The local Elasticsearch Docker configuration uses a persistent Docker volume for Elasticsearch data.
+
+For production use, connection settings, credentials, resource limits and security policies should be moved into a centrally managed configuration system.
+
+---
+
+## Current Limitations
+
+The current implementation is designed as a local, modular log-processing and AI-analysis platform.
+
+The following capabilities are not represented as completed features:
+
+- Full incident lifecycle management.
+- Automatic incident assignment and resolution.
+- DLQ replay, retry and deletion from the dashboard.
+- Production-grade authentication and role-based access control.
+- Distributed high-availability deployment.
+- Fully automated root-cause confirmation.
+- Comprehensive detection of every possible type of sensitive information.
+
+These are potential areas for further development.
+
+---
+
+## Future Enhancements
+
+The following improvements can extend the current framework:
+
+### 1. Advanced DLQ Resource Management
+
+Introduce configurable DLQ retention periods, storage quotas, size limits and monitoring alerts.
+
+These controls are **planned enhancements** and are not currently implemented. They will be considered for implementation after the current project documentation is submitted.
+
+### 2. Automated DLQ Recovery
+
+Add controlled replay and retry workflows, with safeguards against duplicate processing.
+
+### 3. Incident Lifecycle Management
+
+Introduce incident creation, assignment, acknowledgement, status transitions and resolution tracking.
+
+### 4. Advanced Anomaly Detection
+
+Explore machine-learning approaches to detect unusual log patterns and unexpected service behavior.
+
+### 5. Alerting and Notifications
+
+Integrate configurable alerts for critical failures, recurring errors and unusual log activity.
+
+### 6. Security and Access Control
+
+Add authentication, role-based access control, secure secret management and production-grade transport security.
+
+### 7. Scalability and Deployment
+
+Explore distributed deployment, Kafka partition planning, service monitoring and cloud infrastructure.
+
+---
 
 ## Author
 
 **Gaurav**
 
-Computer Science Student | Machine Learning and AI Enthusiast
+Computer Science Student | Interested in Machine Learning, AI and Software Engineering
 
 GitHub: [@GAURAVSri123](https://github.com/GAURAVSri123)
 
-**Project Repository:**  
+Project Repository:
+
 [Universal Log Processing Framework with AI Analysis](https://github.com/GAURAVSri123/Universal-Log-Processing-Framework)
 
 ---
 
-*Built to transform raw logs into meaningful insights through distributed processing, semantic retrieval, and AI-powered analysis.*
+## Project Objective
+
+The Universal Log Processing Framework demonstrates how distributed event streaming, structured log processing, centralized search, semantic retrieval and Large Language Models can be integrated into a single application.
+
+By combining these technologies, the project aims to make log analysis more organized, searchable and useful for troubleshooting complex application behavior.
+
+**Built to transform raw application logs into meaningful operational insights through distributed processing, semantic search and AI-powered investigation.**
