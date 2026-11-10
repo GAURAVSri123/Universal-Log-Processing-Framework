@@ -40,6 +40,9 @@ LOG_PATTERN = re.compile(
 SOURCE_FORMATS = {
     "demo_app": "python_text",
     "payment_api": "json",
+    "app": "simple_text",
+    "server": "simple_text",
+    "collector_rotation_test": "python_text",
 }
 
 
@@ -335,6 +338,58 @@ def parse_log_line(line):
 
 
 # ---------------------------------------------------------
+# Simple timestamp-level-message text parsing
+# ---------------------------------------------------------
+
+SIMPLE_TEXT_PATTERN = re.compile(
+    r"^(?P<timestamp>\\d{4}-\\d{2}-\\d{2} "
+    r"\\d{2}:\\d{2}:\\d{2}(?:[.,]\\d{1,6})?)"
+    r"\\s+(?P<level>INFO|WARNING|ERROR|DEBUG|CRITICAL)"
+    r"\\s+(?P<message>.+)$"
+)
+
+
+def parse_simple_text_log_detailed(line, source_name):
+    """
+    Parse text logs shaped like:
+    2026-10-22 17:00:01 INFO Application started
+
+    The source filename supplies the service name because this format
+    does not contain an explicit service field.
+    """
+    if not isinstance(line, str):
+        return None, "Log line must be a string"
+
+    raw = line.rstrip("\\r\\n")
+    match = SIMPLE_TEXT_PATTERN.match(raw.strip())
+
+    if match is None:
+        return None, (
+            "Text log does not match the expected "
+            "timestamp-level-message pattern"
+        )
+
+    record = {
+        "timestamp": match.group("timestamp"),
+        "level": match.group("level"),
+        "service": source_name,
+        "message": match.group("message").strip(),
+        "attributes": {},
+    }
+
+    normalized, error = validate_record_detailed(record)
+    if error is not None:
+        return None, error
+
+    return build_canonical_record(
+        normalized,
+        raw,
+        source=source_name,
+        format_name="simple_text",
+    ), None
+
+
+# ---------------------------------------------------------
 # JSON log parsing
 # ---------------------------------------------------------
 
@@ -449,7 +504,7 @@ def parse_any_log(line):
     return parse_log_line(line)
 
 
-def parse_by_format(line, format_name):
+def parse_by_format(line, format_name, source_name="unknown"):
     """Parse one line using an explicitly supplied format name."""
 
     if format_name == "json":
@@ -457,6 +512,10 @@ def parse_by_format(line, format_name):
 
     if format_name == "python_text":
         return parse_log_line(line)
+
+    if format_name == "simple_text":
+        record, error = parse_simple_text_log_detailed(line, source_name)
+        return record if error is None else None
 
     return None
 
@@ -505,6 +564,19 @@ def parse_by_source(line, source_name):
                     "Text log does not match the expected pattern "
                     "or contains invalid field values"
                 ),
+            }
+
+    elif format_name == "simple_text":
+        parsed_record, error = parse_simple_text_log_detailed(
+            raw, source_name
+        )
+
+        if error is not None:
+            return {
+                "status": "PARSE_ERROR",
+                "source": source_name,
+                "raw": raw,
+                "error": error,
             }
 
     else:
