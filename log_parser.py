@@ -43,6 +43,11 @@ SOURCE_FORMATS = {
     "app": "simple_text",
     "server": "simple_text",
     "collector_rotation_test": "python_text",
+    "xml_app": "xml",
+    "csv_app": "csv",
+    "syslog_app": "syslog",
+    "cef_app": "cef",
+    "leef_app": "leef",
 }
 
 
@@ -390,6 +395,409 @@ def parse_simple_text_log_detailed(line, source_name):
 
 
 # ---------------------------------------------------------
+# Structured and security-event format parsers
+# ---------------------------------------------------------
+
+import csv
+import io
+import xml.etree.ElementTree as ET
+
+
+def _canonicalize_parsed_record(record, raw, source_name, format_name):
+    """Validate a parsed record and build the shared canonical schema."""
+    normalized, error = validate_record_detailed(record)
+    if error is not None:
+        return None, error
+
+    return build_canonical_record(
+        normalized,
+        raw,
+        source=source_name,
+        format_name=format_name,
+    ), None
+
+
+def _parse_event_timestamp(value):
+    """Normalize ISO timestamps and Unix epoch timestamps."""
+    if value is None:
+        return None
+
+    value = str(value).strip()
+    if not value or value == "-":
+        return None
+
+    try:
+        # Support epoch seconds and epoch milliseconds.
+        if re.fullmatch(r"\d{10}(?:\d{3})?", value):
+            epoch = int(value)
+            if len(value) == 13:
+                epoch = epoch / 1000
+            return datetime.fromtimestamp(
+                epoch, tz=timezone.utc
+            ).isoformat()
+
+        parsed = datetime.fromisoformat(
+            value.replace("Z", "+00:00")
+        )
+        return parsed.isoformat()
+    except (ValueError, OverflowError, OSError):
+        return None
+
+
+def parse_xml_log_detailed(line, source_name):
+    """Parse one-line XML log records with attributes or child elements."""
+    if not isinstance(line, str):
+        return None, "XML log line must be a string"
+
+    try:
+        root = ET.fromstring(line)
+    except ET.ParseError as exc:
+        return None, f"Invalid XML: {exc}"
+
+    data = {str(key).lower(): value for key, value in root.attrib.items()}
+    for child in root:
+        tag = child.tag.split("}")[-1].lower()
+        data[tag] = (child.text or "").strip()
+
+    aliases = {
+        "timestamp": ("timestamp", "time", "datetime"),
+        "level": ("level", "severity"),
+        "service": ("service", "app", "application"),
+        "message": ("message", "msg"),
+    }
+
+    record = {}
+    for target, names in aliases.items():
+        found = next((data[name] for name in names if name in data), None)
+        if found is None and target == "service":
+            found = source_name
+        if found is None:
+            return None, f"XML record is missing required field: {target}"
+        record[target] = found
+
+    known = {name for names in aliases.values() for name in names}
+    record["attributes"] = {
+        key: value for key, value in data.items() if key not in known
+    }
+    return _canonicalize_parsed_record(
+        record, line, source_name, "xml"
+    )
+
+
+def parse_csv_log_detailed(line, source_name):
+    """
+    Parse a headerless CSV event row in this fixed order:
+    timestamp,level,service,message
+
+    Additional columns are retained as field_5, field_6, etc.
+    The collector processes one physical line at a time, so CSV headers
+    and multiline quoted fields are intentionally not supported.
+    """
+    if not isinstance(line, str):
+        return None, "CSV log line must be a string"
+
+    try:
+        rows = list(csv.reader(io.StringIO(line), strict=True))
+    except csv.Error as exc:
+        return None, f"Invalid CSV: {exc}"
+
+    if len(rows) != 1 or len(rows[0]) < 4:
+        return None, (
+            "CSV record must be one line with at least four columns: "
+            "timestamp,level,service,message"
+        )
+
+    values = rows[0]
+    if [value.strip().lower() for value in values[:4]] == [
+        "timestamp", "level", "service", "message"
+    ]:
+        return None, (
+            "CSV header rows are not events; use headerless rows in the "
+            "documented timestamp,level,service,message column order"
+        )
+
+    record = {
+        "timestamp": values[0],
+        "level": values[1],
+        "service": values[2] or source_name,
+        "message": values[3],
+        "attributes": {
+            f"field_{index + 1}": value
+            for index, value in enumerate(values[4:], start=4)
+        },
+    }
+    return _canonicalize_parsed_record(
+        record, line, source_name, "csv"
+    )
+
+
+SYSLOG_SEVERITY = {
+    0: "CRITICAL", 1: "CRITICAL", 2: "CRITICAL",
+    3: "ERROR", 4: "WARNING", 5: "INFO",
+    6: "INFO", 7: "DEBUG",
+}
+
+
+def _syslog_level(priority):
+    severity_code = int(priority) % 8
+    return SYSLOG_SEVERITY[severity_code]
+
+
+def parse_syslog_log_detailed(line, source_name):
+    """Parse common RFC 5424 and RFC 3164 syslog message forms."""
+    if not isinstance(line, str):
+        return None, "Syslog record must be a string"
+
+    raw = line.strip()
+
+    # RFC 5424: PRI VERSION TIMESTAMP HOST APP PROCID MSGID STRUCTURED-DATA MSG
+    rfc5424 = re.match(
+        r"^<(?P<pri>\d{1,3})>1\s+"
+        r"(?P<timestamp>\S+)\s+(?P<host>\S+)\s+"
+        r"(?P<app>\S+)\s+(?P<procid>\S+)\s+"
+        r"(?P<msgid>\S+)\s+(?P<structured>(?:\[.*?\]|-))"
+        r"(?:\s+(?P<message>.*))?$",
+        raw,
+    )
+    if rfc5424:
+        fields = rfc5424.groupdict()
+        timestamp = _parse_event_timestamp(fields["timestamp"])
+        if timestamp is None:
+            return None, "RFC 5424 syslog record has an invalid timestamp"
+        record = {
+            "timestamp": timestamp,
+            "level": _syslog_level(fields["pri"]),
+            "service": fields["app"],
+            "message": fields.get("message") or fields["msgid"],
+            "attributes": {
+                "host": fields["host"],
+                "process_id": fields["procid"],
+                "message_id": fields["msgid"],
+                "structured_data": fields["structured"],
+                "priority": int(fields["pri"]),
+            },
+        }
+        return _canonicalize_parsed_record(
+            record, line, source_name, "syslog"
+        )
+
+    # RFC 3164: <PRI>Mmm dd HH:MM:SS HOST TAG[PID]: MESSAGE
+    rfc3164 = re.match(
+        r"^<(?P<pri>\d{1,3})>"
+        r"(?P<month>[A-Z][a-z]{2})\s+"
+        r"(?P<day>\d{1,2})\s+"
+        r"(?P<clock>\d{2}:\d{2}:\d{2})\s+"
+        r"(?P<host>\S+)\s+(?P<tag>[^:\s\[]+)"
+        r"(?:\[(?P<pid>\d+)\])?:\s*(?P<message>.*)$",
+        raw,
+    )
+    if rfc3164:
+        fields = rfc3164.groupdict()
+        try:
+            parsed = datetime.strptime(
+                f"{datetime.now().year} {fields['month']} "
+                f"{fields['day']} {fields['clock']}",
+                "%Y %b %d %H:%M:%S",
+            )
+        except ValueError as exc:
+            return None, f"Invalid RFC 3164 syslog timestamp: {exc}"
+
+        record = {
+            "timestamp": parsed.isoformat(),
+            "level": _syslog_level(fields["pri"]),
+            "service": fields["tag"],
+            "message": fields["message"],
+            "attributes": {
+                "host": fields["host"],
+                "process_id": fields["pid"],
+                "priority": int(fields["pri"]),
+                "timestamp_year_inferred": True,
+            },
+        }
+        return _canonicalize_parsed_record(
+            record, line, source_name, "syslog"
+        )
+
+    return None, "Syslog record does not match RFC 5424 or RFC 3164"
+
+
+def _split_escaped_pipe(value):
+    """Split CEF/LEEF headers on unescaped pipe characters."""
+    parts = []
+    current = []
+    escaped = False
+
+    for char in value:
+        if escaped:
+            current.append(char)
+            escaped = False
+        elif char == "\\":
+            escaped = True
+        elif char == "|":
+            parts.append("".join(current))
+            current = []
+        else:
+            current.append(char)
+
+    if escaped:
+        current.append("\\")
+    parts.append("".join(current))
+    return parts
+
+
+def _parse_key_value_extension(extension, delimiter_pattern=r"\s+"):
+    """Parse key=value extension fields while allowing spaces in values."""
+    matches = list(re.finditer(
+        r"(?:^|" + delimiter_pattern + r")([A-Za-z][A-Za-z0-9]*)=",
+        extension,
+    ))
+    result = {}
+    for index, match in enumerate(matches):
+        value_start = match.end()
+        value_end = (
+            matches[index + 1].start()
+            if index + 1 < len(matches)
+            else len(extension)
+        )
+        result[match.group(1)] = extension[value_start:value_end].strip()
+    return result
+
+
+def _cef_severity(value):
+    try:
+        severity = int(value)
+    except (TypeError, ValueError):
+        return None
+    if not 0 <= severity <= 10:
+        return None
+    if severity <= 3:
+        return "INFO"
+    if severity <= 6:
+        return "WARNING"
+    if severity <= 8:
+        return "ERROR"
+    return "CRITICAL"
+
+
+def parse_cef_log_detailed(line, source_name):
+    """Parse a Common Event Format (CEF) security event."""
+    if not isinstance(line, str) or not line.startswith("CEF:"):
+        return None, "CEF record must begin with CEF:"
+
+    parts = _split_escaped_pipe(line.rstrip("\r\n"))
+    if len(parts) < 8:
+        return None, "CEF record must contain a seven-field header and extension"
+
+    version = parts[0][4:]
+    vendor, product, device_version, signature_id, name, severity = parts[1:7]
+    extension = "|".join(parts[7:])
+    fields = _parse_key_value_extension(extension)
+
+    timestamp_value = (
+        fields.get("rt") or fields.get("start") or fields.get("end")
+    )
+    timestamp = _parse_event_timestamp(timestamp_value)
+    if timestamp is None:
+        return None, "CEF extension must include a valid rt, start, or end timestamp"
+
+    level = _cef_severity(severity)
+    if level is None:
+        return None, "CEF severity must be an integer from 0 to 10"
+
+    record = {
+        "timestamp": timestamp,
+        "level": level,
+        "service": product or vendor or source_name,
+        "message": name or signature_id,
+        "attributes": {
+            "cef_version": version,
+            "device_vendor": vendor,
+            "device_product": product,
+            "device_version": device_version,
+            "signature_id": signature_id,
+            "cef_severity": severity,
+            **fields,
+        },
+    }
+    return _canonicalize_parsed_record(
+        record, line, source_name, "cef"
+    )
+
+
+def _leef_severity(value):
+    try:
+        severity = int(value)
+    except (TypeError, ValueError):
+        return None
+    if not 0 <= severity <= 10:
+        return None
+    if severity <= 3:
+        return "INFO"
+    if severity <= 6:
+        return "WARNING"
+    if severity <= 8:
+        return "ERROR"
+    return "CRITICAL"
+
+
+def parse_leef_log_detailed(line, source_name):
+    """Parse LEEF 1.0/2.0 records with tab-delimited extensions."""
+    if not isinstance(line, str) or not line.startswith("LEEF:"):
+        return None, "LEEF record must begin with LEEF:"
+
+    header, separator, extension = line.rstrip("\r\n").partition("|")
+    if not separator:
+        return None, "LEEF record is missing its extension separator"
+
+    header_parts = header.split("|")
+    # Header is LEEF:version|vendor|product|version|event-id[|delimiter]
+    if len(header_parts) < 5:
+        return None, "LEEF header must contain version, vendor, product, version, and event ID"
+
+    leef_version = header_parts[0][5:]
+    vendor, product, device_version, event_id = header_parts[1:5]
+    extension_delimiter = "\t"
+    if len(header_parts) > 5 and header_parts[5]:
+        delimiter_name = header_parts[5]
+        extension_delimiter = "\t" if delimiter_name.lower() in ("tab", "\\t") else delimiter_name
+
+    if extension_delimiter == "\t":
+        fields = _parse_key_value_extension(extension, delimiter_pattern=r"\t+")
+    else:
+        fields = _parse_key_value_extension(
+            extension,
+            delimiter_pattern=re.escape(extension_delimiter) + r"+",
+        )
+
+    timestamp_value = fields.get("devTime") or fields.get("devTimeEpoch")
+    timestamp = _parse_event_timestamp(timestamp_value)
+    if timestamp is None:
+        return None, "LEEF extension must include a valid devTime or devTimeEpoch"
+
+    level = _leef_severity(fields.get("sev", "5"))
+    if level is None:
+        return None, "LEEF severity (sev) must be an integer from 0 to 10"
+
+    record = {
+        "timestamp": timestamp,
+        "level": level,
+        "service": product or vendor or source_name,
+        "message": fields.get("msg") or fields.get("cat") or event_id,
+        "attributes": {
+            "leef_version": leef_version,
+            "device_vendor": vendor,
+            "device_product": product,
+            "device_version": device_version,
+            "event_id": event_id,
+            **fields,
+        },
+    }
+    return _canonicalize_parsed_record(
+        record, line, source_name, "leef"
+    )
+
+
+# ---------------------------------------------------------
 # JSON log parsing
 # ---------------------------------------------------------
 
@@ -517,6 +925,18 @@ def parse_by_format(line, format_name, source_name="unknown"):
         record, error = parse_simple_text_log_detailed(line, source_name)
         return record if error is None else None
 
+    detailed_parsers = {
+        "xml": parse_xml_log_detailed,
+        "csv": parse_csv_log_detailed,
+        "syslog": parse_syslog_log_detailed,
+        "cef": parse_cef_log_detailed,
+        "leef": parse_leef_log_detailed,
+    }
+    parser = detailed_parsers.get(format_name)
+    if parser is not None:
+        record, error = parser(line, source_name)
+        return record if error is None else None
+
     return None
 
 
@@ -566,10 +986,15 @@ def parse_by_source(line, source_name):
                 ),
             }
 
-    elif format_name == "simple_text":
-        parsed_record, error = parse_simple_text_log_detailed(
-            raw, source_name
-        )
+    elif format_name in {"xml", "csv", "syslog", "cef", "leef"}:
+        parser = {
+            "xml": parse_xml_log_detailed,
+            "csv": parse_csv_log_detailed,
+            "syslog": parse_syslog_log_detailed,
+            "cef": parse_cef_log_detailed,
+            "leef": parse_leef_log_detailed,
+        }[format_name]
+        parsed_record, error = parser(raw, source_name)
 
         if error is not None:
             return {
