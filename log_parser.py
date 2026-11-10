@@ -1018,6 +1018,19 @@ def parse_by_source(line, source_name):
                 ),
             }
 
+    elif format_name == "simple_text":
+        parsed_record, error = parse_simple_text_log_detailed(
+            raw, source_name
+        )
+
+        if error is not None:
+            return {
+                "status": "PARSE_ERROR",
+                "source": source_name,
+                "raw": raw,
+                "error": error,
+            }
+
     elif format_name in {"xml", "csv", "syslog", "cef", "leef"}:
         parser = {
             "xml": parse_xml_log_detailed,
