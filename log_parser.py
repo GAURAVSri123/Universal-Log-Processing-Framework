@@ -342,10 +342,10 @@ def parse_log_line(line):
 # ---------------------------------------------------------
 
 SIMPLE_TEXT_PATTERN = re.compile(
-    r"^(?P<timestamp>\\d{4}-\\d{2}-\\d{2} "
-    r"\\d{2}:\\d{2}:\\d{2}(?:[.,]\\d{1,6})?)"
-    r"\\s+(?P<level>INFO|WARNING|ERROR|DEBUG|CRITICAL)"
-    r"\\s+(?P<message>.+)$"
+    r"^(?P<timestamp>\d{4}-\d{2}-\d{2} "
+    r"\d{2}:\d{2}:\d{2}(?:[.,]\d{1,6})?)"
+    r"\s+(?P<level>INFO|WARNING|ERROR|DEBUG|CRITICAL)"
+    r"\s+(?P<message>.+)$"
 )
 
 
@@ -360,7 +360,7 @@ def parse_simple_text_log_detailed(line, source_name):
     if not isinstance(line, str):
         return None, "Log line must be a string"
 
-    raw = line.rstrip("\\r\\n")
+    raw = line.rstrip("\r\n")
     match = SIMPLE_TEXT_PATTERN.match(raw.strip())
 
     if match is None:
