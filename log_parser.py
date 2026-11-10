@@ -1,5 +1,8 @@
 import re
 import json
+import csv
+import io
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from datetime import datetime
 import socket
@@ -398,10 +401,6 @@ def parse_simple_text_log_detailed(line, source_name):
 # Structured and security-event format parsers
 # ---------------------------------------------------------
 
-import csv
-import io
-import xml.etree.ElementTree as ET
-
 
 def _canonicalize_parsed_record(record, raw, source_name, format_name):
     """Validate a parsed record and build the shared canonical schema."""
@@ -436,10 +435,26 @@ def _parse_event_timestamp(value):
                 epoch, tz=timezone.utc
             ).isoformat()
 
-        parsed = datetime.fromisoformat(
-            value.replace("Z", "+00:00")
-        )
-        return parsed.isoformat()
+        try:
+            parsed = datetime.fromisoformat(
+                value.replace("Z", "+00:00")
+            )
+            return parsed.isoformat()
+        except ValueError:
+            # Common CEF device-event timestamps.
+            for timestamp_format in (
+                "%b %d %Y %H:%M:%S",
+                "%b %d %Y %H:%M:%S.%f",
+                "%Y-%m-%d %H:%M:%S",
+                "%Y-%m-%d %H:%M:%S.%f",
+            ):
+                try:
+                    return datetime.strptime(
+                        value, timestamp_format
+                    ).isoformat()
+                except ValueError:
+                    continue
+            return None
     except (ValueError, OverflowError, OSError):
         return None
 
