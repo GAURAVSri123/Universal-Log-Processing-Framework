@@ -1,0 +1,9 @@
+2026-10-22 10:15:01 INFO User login successful
+2026-10-22 10:15:05 ERROR Database connection failed
+2026-10-22 10:15:08 WARNING Memory usage is high2026-10-22 11:00:00 INFO New test event
+[app.log] 2026-10-22 11:00:00 INFO New test event
+[app.log] 2026-10-22 11:00:00 INFO New test event
+2026-10-22 15:45:00 INFO New checkpoint test
+2026-10-22 15:46:00 ERROR Database connection failed
+2026-10-22 16:05:00 INFO New checkpoint test
+2026-10-22 16:10:00 ERROR Database connection failed

@@ -1,0 +1,374 @@
+
+2026-11-07 12:11:44,085 INFO demo_app - Database query completed
+2026-11-07 12:11:46,086 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:11:48,095 ERROR demo_app - Database connection failed
+2026-11-07 12:11:50,098 ERROR demo_app - API request failed with status 500
+2026-11-07 12:11:52,100 INFO demo_app - API request completed with status 200
+2026-11-07 12:11:54,101 WARNING demo_app - API response time is above threshold
+2026-11-07 12:11:56,101 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:11:58,102 INFO demo_app - User login successful
+2026-11-07 12:12:00,103 WARNING demo_app - API response time is above threshold
+2026-11-07 12:12:02,103 INFO demo_app - Database query completed
+2026-11-07 12:12:04,104 WARNING demo_app - API response time is above threshold
+2026-11-07 12:12:06,105 INFO demo_app - Database query completed
+2026-11-07 12:12:08,105 INFO demo_app - User login successful
+2026-11-07 12:12:10,106 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:12:12,107 ERROR demo_app - Database connection failed
+2026-11-07 12:12:14,107 INFO demo_app - API request completed with status 200
+2026-11-07 12:12:16,108 WARNING demo_app - API response time is above threshold
+2026-11-07 12:12:18,109 ERROR demo_app - API request failed with status 500
+2026-11-07 12:12:20,109 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:12:22,110 WARNING demo_app - API response time is above threshold
+2026-11-07 12:12:24,111 INFO demo_app - Database query completed
+2026-11-07 12:12:26,112 ERROR demo_app - Database connection failed
+2026-11-07 12:12:28,113 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:12:30,113 ERROR demo_app - API request failed with status 500
+2026-11-07 12:12:32,114 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:12:34,115 INFO demo_app - Database query completed
+2026-11-07 12:12:36,115 INFO demo_app - Database query completed
+2026-11-07 12:12:38,116 WARNING demo_app - API response time is above threshold
+2026-11-07 12:12:40,117 ERROR demo_app - Database connection failed
+2026-11-07 12:12:42,117 INFO demo_app - User login successful
+2026-11-07 12:12:44,118 ERROR demo_app - Database connection failed
+2026-11-07 12:12:46,118 INFO demo_app - API request completed with status 200
+2026-11-07 12:12:48,119 INFO demo_app - Database query completed
+2026-11-07 12:12:50,119 INFO demo_app - API request completed with status 200
+2026-11-07 12:12:52,120 INFO demo_app - User login successful
+2026-11-07 12:12:54,120 WARNING demo_app - API response time is above threshold
+2026-11-07 12:12:56,121 ERROR demo_app - API request failed with status 500
+2026-11-07 12:12:58,122 WARNING demo_app - API response time is above threshold
+2026-11-07 12:13:00,122 ERROR demo_app - Database connection failed
+2026-11-07 12:13:02,122 INFO demo_app - Database query completed
+2026-11-07 12:13:04,123 WARNING demo_app - API response time is above threshold
+2026-11-07 12:13:06,124 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:13:08,124 ERROR demo_app - API request failed with status 500
+2026-11-07 12:13:10,125 ERROR demo_app - API request failed with status 500
+2026-11-07 12:13:12,126 ERROR demo_app - API request failed with status 500
+2026-11-07 12:13:14,126 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:13:16,127 INFO demo_app - Database query completed
+2026-11-07 12:13:18,128 INFO demo_app - User login successful
+2026-11-07 12:13:20,129 ERROR demo_app - Database connection failed
+2026-11-07 12:13:22,130 WARNING demo_app - API response time is above threshold
+2026-11-07 12:13:24,131 ERROR demo_app - API request failed with status 500
+2026-11-07 12:13:26,131 WARNING demo_app - API response time is above threshold
+2026-11-07 12:13:28,134 INFO demo_app - User login successful
+2026-11-07 12:13:30,135 ERROR demo_app - API request failed with status 500
+2026-11-07 12:13:32,135 ERROR demo_app - API request failed with status 500
+2026-11-07 12:13:34,305 INFO demo_app - Database query completed
+2026-11-07 12:13:36,306 INFO demo_app - API request completed with status 200
+2026-11-07 12:13:38,307 INFO demo_app - API request completed with status 200
+2026-11-07 12:13:40,308 ERROR demo_app - API request failed with status 500
+2026-11-07 12:13:42,309 WARNING demo_app - API response time is above threshold
+2026-11-07 12:13:44,309 WARNING demo_app - API response time is above threshold
+2026-11-07 12:13:46,310 INFO demo_app - Database query completed
+2026-11-07 12:13:48,324 ERROR demo_app - Database connection failed
+2026-11-07 12:13:50,325 ERROR demo_app - API request failed with status 500
+2026-11-07 12:13:52,325 INFO demo_app - API request completed with status 200
+2026-11-07 12:13:54,326 INFO demo_app - Database query completed
+2026-11-07 12:13:56,326 ERROR demo_app - Database connection failed
+2026-11-07 12:13:58,328 ERROR demo_app - API request failed with status 500
+2026-11-07 12:14:00,329 ERROR demo_app - Database connection failed
+2026-11-07 12:14:02,330 INFO demo_app - Database query completed
+2026-11-07 12:14:04,331 WARNING demo_app - API response time is above threshold
+2026-11-07 12:14:06,331 INFO demo_app - API request completed with status 200
+2026-11-07 12:14:08,332 INFO demo_app - Database query completed
+2026-11-07 12:14:10,333 INFO demo_app - User login successful
+2026-11-07 12:14:12,333 INFO demo_app - User login successful
+2026-11-07 12:14:14,334 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:14:16,334 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:14:18,335 ERROR demo_app - API request failed with status 500
+2026-11-07 12:14:20,336 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:14:22,344 ERROR demo_app - API request failed with status 500
+2026-11-07 12:14:24,397 INFO demo_app - Database query completed
+2026-11-07 12:14:26,419 ERROR demo_app - Database connection failed
+2026-11-07 12:14:28,420 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:14:30,443 INFO demo_app - User login successful
+2026-11-07 12:14:32,464 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:14:34,465 ERROR demo_app - API request failed with status 500
+2026-11-07 12:14:36,513 INFO demo_app - User login successful
+2026-11-07 12:14:38,521 INFO demo_app - Database query completed
+2026-11-07 12:14:40,837 ERROR demo_app - API request failed with status 500
+2026-11-07 12:14:43,054 WARNING demo_app - API response time is above threshold
+2026-11-07 12:14:45,093 INFO demo_app - API request completed with status 200
+2026-11-07 12:14:47,099 ERROR demo_app - Database connection failed
+2026-11-07 12:14:49,101 INFO demo_app - User login successful
+2026-11-07 12:14:51,113 INFO demo_app - User login successful
+2026-11-07 12:14:53,246 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:14:55,248 WARNING demo_app - API response time is above threshold
+2026-11-07 12:14:57,249 ERROR demo_app - API request failed with status 500
+2026-11-07 12:14:59,250 WARNING demo_app - API response time is above threshold
+2026-11-07 12:15:01,251 ERROR demo_app - Database connection failed
+2026-11-07 12:15:03,252 INFO demo_app - User login successful
+2026-11-07 12:15:05,252 INFO demo_app - API request completed with status 200
+2026-11-07 12:15:07,253 ERROR demo_app - Database connection failed
+2026-11-07 12:15:09,254 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:15:11,254 WARNING demo_app - API response time is above threshold
+2026-11-07 12:15:13,255 ERROR demo_app - Database connection failed
+2026-11-07 12:15:15,255 ERROR demo_app - API request failed with status 500
+2026-11-07 12:15:17,256 INFO demo_app - User login successful
+2026-11-07 12:15:19,257 WARNING demo_app - API response time is above threshold
+2026-11-07 12:15:21,258 INFO demo_app - User login successful
+2026-11-07 12:15:23,259 INFO demo_app - API request completed with status 200
+2026-11-07 12:15:25,259 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:15:27,260 INFO demo_app - API request completed with status 200
+2026-11-07 12:15:29,261 INFO demo_app - Database query completed
+2026-11-07 12:15:31,262 WARNING demo_app - API response time is above threshold
+2026-11-07 12:15:33,264 WARNING demo_app - API response time is above threshold
+2026-11-07 12:15:35,265 INFO demo_app - User login successful
+2026-11-07 12:15:37,293 WARNING demo_app - API response time is above threshold
+2026-11-07 12:15:39,294 WARNING demo_app - API response time is above threshold
+2026-11-07 12:15:41,310 ERROR demo_app - Database connection failed
+2026-11-07 12:15:43,312 ERROR demo_app - API request failed with status 500
+2026-11-07 12:15:45,313 WARNING demo_app - API response time is above threshold
+2026-11-07 12:15:47,316 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:15:49,318 WARNING demo_app - API response time is above threshold
+2026-11-07 12:15:51,337 ERROR demo_app - Database connection failed
+2026-11-07 12:15:53,338 ERROR demo_app - API request failed with status 500
+2026-11-07 12:15:55,339 INFO demo_app - User login successful
+2026-11-07 12:15:57,339 INFO demo_app - API request completed with status 200
+2026-11-07 12:15:59,342 WARNING demo_app - API response time is above threshold
+2026-11-07 12:16:01,343 WARNING demo_app - API response time is above threshold
+2026-11-07 12:16:03,344 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:16:05,346 WARNING demo_app - API response time is above threshold
+2026-11-07 12:16:07,347 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:16:09,348 ERROR demo_app - Database connection failed
+2026-11-07 12:16:11,350 INFO demo_app - Database query completed
+2026-11-07 12:16:13,353 WARNING demo_app - API response time is above threshold
+2026-11-07 12:16:15,356 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:16:17,364 INFO demo_app - Database query completed
+2026-11-07 12:16:19,369 ERROR demo_app - Database connection failed
+2026-11-07 12:16:21,370 WARNING demo_app - API response time is above threshold
+2026-11-07 12:16:23,404 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:16:25,406 ERROR demo_app - API request failed with status 500
+2026-11-07 12:16:27,406 INFO demo_app - User login successful
+2026-11-07 12:16:29,407 WARNING demo_app - API response time is above threshold
+2026-11-07 12:16:31,409 ERROR demo_app - Database connection failed
+2026-11-07 12:16:33,409 INFO demo_app - API request completed with status 200
+2026-11-07 12:16:35,416 INFO demo_app - Database query completed
+2026-11-07 12:16:37,418 ERROR demo_app - Database connection failed
+2026-11-07 12:16:39,419 ERROR demo_app - API request failed with status 500
+2026-11-07 12:16:41,420 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:16:43,421 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:16:45,421 ERROR demo_app - API request failed with status 500
+2026-11-07 12:16:47,422 INFO demo_app - User login successful
+2026-11-07 12:16:49,422 WARNING demo_app - API response time is above threshold
+2026-11-07 12:16:51,423 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:16:53,423 WARNING demo_app - API response time is above threshold
+2026-11-07 12:16:55,424 INFO demo_app - User login successful
+2026-11-07 12:16:57,424 WARNING demo_app - API response time is above threshold
+2026-11-07 12:16:59,425 WARNING demo_app - API response time is above threshold
+2026-11-07 12:17:01,426 INFO demo_app - Database query completed
+2026-11-07 12:17:03,426 INFO demo_app - User login successful
+2026-11-07 12:17:05,427 ERROR demo_app - Database connection failed
+2026-11-07 12:17:07,428 INFO demo_app - Database query completed
+2026-11-07 12:17:09,428 INFO demo_app - API request completed with status 200
+2026-11-07 12:17:11,429 INFO demo_app - API request completed with status 200
+2026-11-07 12:17:13,429 ERROR demo_app - API request failed with status 500
+2026-11-07 12:17:15,430 INFO demo_app - User login successful
+2026-11-07 12:17:17,431 ERROR demo_app - API request failed with status 500
+2026-11-07 12:17:19,431 WARNING demo_app - API response time is above threshold
+2026-11-07 12:17:21,432 WARNING demo_app - API response time is above threshold
+2026-11-07 12:17:23,433 INFO demo_app - API request completed with status 200
+2026-11-07 12:17:25,433 ERROR demo_app - API request failed with status 500
+2026-11-07 12:17:27,434 INFO demo_app - Database query completed
+2026-11-07 12:17:29,435 WARNING demo_app - API response time is above threshold
+2026-11-07 12:17:31,435 ERROR demo_app - API request failed with status 500
+2026-11-07 12:17:33,436 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:17:35,437 INFO demo_app - Database query completed
+2026-11-07 12:17:37,437 ERROR demo_app - API request failed with status 500
+2026-11-07 12:17:39,438 WARNING demo_app - API response time is above threshold
+2026-11-07 12:17:41,439 ERROR demo_app - API request failed with status 500
+2026-11-07 12:17:43,440 INFO demo_app - User login successful
+2026-11-07 12:17:45,441 INFO demo_app - API request completed with status 200
+2026-11-07 12:17:47,441 INFO demo_app - Database query completed
+2026-11-07 12:17:49,444 ERROR demo_app - Database connection failed
+2026-11-07 12:17:51,460 INFO demo_app - API request completed with status 200
+2026-11-07 12:17:53,461 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:17:55,462 INFO demo_app - API request completed with status 200
+2026-11-07 12:17:57,463 ERROR demo_app - Database connection failed
+2026-11-07 12:17:59,464 INFO demo_app - Database query completed
+2026-11-07 12:18:01,464 INFO demo_app - Database query completed
+2026-11-07 12:18:03,464 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:18:05,467 INFO demo_app - Database query completed
+2026-11-07 12:18:07,469 INFO demo_app - User login successful
+2026-11-07 12:18:09,470 ERROR demo_app - Database connection failed
+2026-11-07 12:18:11,471 INFO demo_app - Database query completed
+2026-11-07 12:18:13,472 WARNING demo_app - API response time is above threshold
+2026-11-07 12:18:15,472 ERROR demo_app - API request failed with status 500
+2026-11-07 12:18:17,475 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:18:19,477 WARNING demo_app - API response time is above threshold
+2026-11-07 12:18:21,478 INFO demo_app - Database query completed
+2026-11-07 12:18:23,478 WARNING demo_app - API response time is above threshold
+2026-11-07 12:18:25,479 WARNING demo_app - API response time is above threshold
+2026-11-07 12:18:27,480 INFO demo_app - Database query completed
+2026-11-07 12:18:29,480 ERROR demo_app - API request failed with status 500
+2026-11-07 12:18:31,529 INFO demo_app - Database query completed
+2026-11-07 12:18:33,531 ERROR demo_app - Database connection failed
+2026-11-07 12:18:35,532 ERROR demo_app - API request failed with status 500
+2026-11-07 12:18:37,539 ERROR demo_app - Database connection failed
+2026-11-07 12:18:39,540 INFO demo_app - API request completed with status 200
+2026-11-07 12:18:41,541 INFO demo_app - Database query completed
+2026-11-07 12:18:43,542 INFO demo_app - User login successful
+2026-11-07 12:18:45,542 ERROR demo_app - API request failed with status 500
+2026-11-07 12:18:47,543 INFO demo_app - API request completed with status 200
+2026-11-07 12:18:49,543 INFO demo_app - API request completed with status 200
+2026-11-07 12:18:51,544 ERROR demo_app - API request failed with status 500
+2026-11-07 12:18:53,545 INFO demo_app - Database query completed
+2026-11-07 12:18:55,546 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:18:57,546 INFO demo_app - API request completed with status 200
+2026-11-07 12:18:59,547 ERROR demo_app - Database connection failed
+2026-11-07 12:19:01,547 INFO demo_app - Database query completed
+2026-11-07 12:19:03,548 INFO demo_app - API request completed with status 200
+2026-11-07 12:19:05,548 ERROR demo_app - API request failed with status 500
+2026-11-07 12:19:07,549 ERROR demo_app - Database connection failed
+2026-11-07 12:19:09,550 INFO demo_app - Database query completed
+2026-11-07 12:19:11,550 ERROR demo_app - API request failed with status 500
+2026-11-07 12:19:13,551 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:19:15,551 INFO demo_app - API request completed with status 200
+2026-11-07 12:19:17,552 INFO demo_app - Database query completed
+2026-11-07 12:19:19,552 INFO demo_app - Database query completed
+2026-11-07 12:19:21,553 WARNING demo_app - API response time is above threshold
+2026-11-07 12:19:23,554 INFO demo_app - Database query completed
+2026-11-07 12:19:25,554 INFO demo_app - Database query completed
+2026-11-07 12:19:27,555 ERROR demo_app - Database connection failed
+2026-11-07 12:19:29,555 INFO demo_app - User login successful
+2026-11-07 12:19:31,556 ERROR demo_app - API request failed with status 500
+2026-11-07 12:19:33,557 ERROR demo_app - API request failed with status 500
+2026-11-07 12:19:35,558 ERROR demo_app - API request failed with status 500
+2026-11-07 12:19:37,559 INFO demo_app - API request completed with status 200
+2026-11-07 12:19:39,559 INFO demo_app - API request completed with status 200
+2026-11-07 12:19:41,560 INFO demo_app - Database query completed
+2026-11-07 12:19:43,561 WARNING demo_app - API response time is above threshold
+2026-11-07 12:19:45,572 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:19:47,573 INFO demo_app - API request completed with status 200
+2026-11-07 12:19:49,573 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:19:51,574 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:19:53,575 ERROR demo_app - API request failed with status 500
+2026-11-07 12:19:55,575 INFO demo_app - API request completed with status 200
+2026-11-07 12:19:57,576 ERROR demo_app - Database connection failed
+2026-11-07 12:19:59,577 WARNING demo_app - API response time is above threshold
+2026-11-07 12:20:01,577 INFO demo_app - Database query completed
+2026-11-07 12:20:03,578 INFO demo_app - API request completed with status 200
+2026-11-07 12:20:05,579 ERROR demo_app - API request failed with status 500
+2026-11-07 12:20:07,580 INFO demo_app - API request completed with status 200
+2026-11-07 12:20:09,581 INFO demo_app - API request completed with status 200
+2026-11-07 12:20:11,581 ERROR demo_app - API request failed with status 500
+2026-11-07 12:20:13,604 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:20:15,605 INFO demo_app - Database query completed
+2026-11-07 12:20:17,605 WARNING demo_app - API response time is above threshold
+2026-11-07 12:20:19,606 INFO demo_app - Database query completed
+2026-11-07 12:20:21,607 ERROR demo_app - Database connection failed
+2026-11-07 12:20:23,618 INFO demo_app - API request completed with status 200
+2026-11-07 12:20:25,619 WARNING demo_app - API response time is above threshold
+2026-11-07 12:20:27,621 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:20:29,621 ERROR demo_app - API request failed with status 500
+2026-11-07 12:20:31,622 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:20:33,624 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:20:35,625 INFO demo_app - Database query completed
+2026-11-07 12:20:37,626 ERROR demo_app - Database connection failed
+2026-11-07 12:20:39,627 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:20:41,627 WARNING demo_app - API response time is above threshold
+2026-11-07 12:20:43,628 ERROR demo_app - Database connection failed
+2026-11-07 12:20:45,630 INFO demo_app - Database query completed
+2026-11-07 12:20:47,631 ERROR demo_app - Database connection failed
+2026-11-07 12:20:49,632 ERROR demo_app - API request failed with status 500
+2026-11-07 12:20:51,633 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:20:53,634 ERROR demo_app - API request failed with status 500
+2026-11-07 12:20:55,635 WARNING demo_app - API response time is above threshold
+2026-11-07 12:20:57,636 WARNING demo_app - API response time is above threshold
+2026-11-07 12:20:59,636 ERROR demo_app - Database connection failed
+2026-11-07 12:21:01,642 INFO demo_app - User login successful
+2026-11-07 12:21:03,643 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:21:05,736 INFO demo_app - Database query completed
+2026-11-07 12:21:07,737 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:21:09,737 INFO demo_app - API request completed with status 200
+2026-11-07 12:21:11,737 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:21:13,738 WARNING demo_app - API response time is above threshold
+2026-11-07 12:21:15,739 ERROR demo_app - API request failed with status 500
+2026-11-07 12:21:17,740 INFO demo_app - User login successful
+2026-11-07 12:21:19,741 WARNING demo_app - API response time is above threshold
+2026-11-07 12:21:21,741 ERROR demo_app - API request failed with status 500
+2026-11-07 12:21:23,742 ERROR demo_app - API request failed with status 500
+2026-11-07 12:21:25,743 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:21:27,743 WARNING demo_app - API response time is above threshold
+2026-11-07 12:21:29,744 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:21:31,745 ERROR demo_app - API request failed with status 500
+2026-11-07 12:21:33,745 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:21:35,746 WARNING demo_app - API response time is above threshold
+2026-11-07 12:21:37,746 WARNING demo_app - API response time is above threshold
+2026-11-07 12:21:39,747 ERROR demo_app - Database connection failed
+2026-11-07 12:21:41,748 INFO demo_app - API request completed with status 200
+2026-11-07 12:21:43,749 INFO demo_app - API request completed with status 200
+2026-11-07 12:21:45,754 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:21:47,755 ERROR demo_app - API request failed with status 500
+2026-11-07 12:21:49,756 WARNING demo_app - API response time is above threshold
+2026-11-07 12:21:51,757 ERROR demo_app - Database connection failed
+2026-11-07 12:21:53,760 INFO demo_app - User login successful
+2026-11-07 12:21:55,761 INFO demo_app - API request completed with status 200
+2026-11-07 12:21:57,790 INFO demo_app - Database query completed
+2026-11-07 12:21:59,801 ERROR demo_app - Database connection failed
+2026-11-07 12:22:01,828 ERROR demo_app - Database connection failed
+2026-11-07 12:22:03,849 ERROR demo_app - API request failed with status 500
+2026-11-07 12:22:05,880 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:22:07,916 ERROR demo_app - Database connection failed
+2026-11-07 12:22:09,993 INFO demo_app - Database query completed
+2026-11-07 12:22:11,995 INFO demo_app - API request completed with status 200
+2026-11-07 12:22:14,076 ERROR demo_app - Database connection failed
+2026-11-07 12:22:16,079 INFO demo_app - API request completed with status 200
+2026-11-07 12:22:18,107 INFO demo_app - Database query completed
+2026-11-07 12:22:20,109 WARNING demo_app - API response time is above threshold
+2026-11-07 12:22:22,119 WARNING demo_app - API response time is above threshold
+2026-11-07 12:22:24,129 ERROR demo_app - API request failed with status 500
+2026-11-07 12:22:26,130 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:22:28,138 ERROR demo_app - API request failed with status 500
+2026-11-07 12:22:30,139 INFO demo_app - API request completed with status 200
+2026-11-07 12:22:32,162 ERROR demo_app - API request failed with status 500
+2026-11-07 12:22:34,165 ERROR demo_app - Database connection failed
+2026-11-07 12:22:36,188 ERROR demo_app - API request failed with status 500
+2026-11-07 12:22:38,195 INFO demo_app - User login successful
+2026-11-07 12:22:40,196 INFO demo_app - API request completed with status 200
+2026-11-07 12:22:42,197 INFO demo_app - User login successful
+2026-11-07 12:22:44,199 ERROR demo_app - Database connection failed
+2026-11-07 12:22:46,200 ERROR demo_app - Database connection failed
+2026-11-07 12:22:48,202 ERROR demo_app - API request failed with status 500
+2026-11-07 12:22:50,204 ERROR demo_app - Database connection failed
+2026-11-07 12:22:52,205 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:22:54,206 ERROR demo_app - API request failed with status 500
+2026-11-07 12:22:56,206 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:22:58,207 ERROR demo_app - Database connection failed
+2026-11-07 12:23:00,404 INFO demo_app - Database query completed
+2026-11-07 12:23:02,571 ERROR demo_app - Database connection failed
+2026-11-07 12:23:04,608 ERROR demo_app - Database connection failed
+2026-11-07 12:23:06,614 ERROR demo_app - Database connection failed
+2026-11-07 12:23:08,659 INFO demo_app - Database query completed
+2026-11-07 12:23:10,669 WARNING demo_app - API response time is above threshold
+2026-11-07 12:23:12,674 INFO demo_app - API request completed with status 200
+2026-11-07 12:23:14,713 INFO demo_app - API request completed with status 200
+2026-11-07 12:23:16,724 ERROR demo_app - API request failed with status 500
+2026-11-07 12:23:18,725 INFO demo_app - User login successful
+2026-11-07 12:23:20,744 INFO demo_app - User login successful
+2026-11-07 12:23:22,745 ERROR demo_app - Database connection failed
+2026-11-07 12:23:24,745 ERROR demo_app - API request failed with status 500
+2026-11-07 12:23:26,746 ERROR demo_app - Database connection failed
+2026-11-07 12:23:28,747 INFO demo_app - API request completed with status 200
+2026-11-07 12:23:30,748 ERROR demo_app - API request failed with status 500
+2026-11-07 12:23:32,749 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:23:34,749 INFO demo_app - Database query completed
+2026-11-07 12:23:36,750 INFO demo_app - Database query completed
+2026-11-07 12:23:38,750 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:23:40,770 INFO demo_app - User login successful
+2026-11-07 12:23:42,772 WARNING demo_app - API response time is above threshold
+2026-11-07 12:23:44,773 ERROR demo_app - API request failed with status 500
+2026-11-07 12:23:46,774 INFO demo_app - API request completed with status 200
+2026-11-07 12:23:48,775 ERROR demo_app - API request failed with status 500
+2026-11-07 12:23:50,776 INFO demo_app - User login successful
+2026-11-07 12:23:52,777 ERROR demo_app - API request failed with status 500
+2026-11-07 12:23:54,778 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:23:56,779 INFO demo_app - User login successful
+2026-11-07 12:23:58,780 INFO demo_app - API request completed with status 200
+2026-11-07 12:24:00,781 WARNING demo_app - Database connection pool is nearly full
+2026-11-07 12:24:02,782 WARNING demo_app - API response time is above threshold
+2026-11-07 12:24:04,783 ERROR demo_app - API request failed with status 500
+2026-11-07 12:24:06,784 INFO demo_app - API request completed with status 200
+2026-11-07 12:24:08,785 ERROR demo_app - Database connection failed
+2026-11-07 12:24:10,787 INFO demo_app - Database query completed
